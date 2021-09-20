@@ -1,0 +1,42 @@
+<div>
+  <h3>Configuração da Eleição</h3>
+
+  <div>
+    <h4>Cadastro de Candidatos</h4>
+
+    <label for="idNomeCandidato">Nome do Candidato</label>
+    <input type="text" id="idNomeCandidato">
+
+    <label for="idCodCandidato">Codigo do Candidato</label>
+    <input type="number" id="idCodCandidato">
+
+    <button type="button">Adicionar</button>
+
+  </div>
+
+  <div>
+    <h4>Configurações da eleição</h4>
+
+    <label for="idTipoEleicao">Tipo de eleição</label>
+    <input list="tipoEleicao" id="idTipoEleicao">
+    <datalist id="tipoEleicao">
+      <option value="Presidente"></option>
+      <option value="Governador"></option>
+      <option value="Prefeito"></option>
+
+    </datalist>
+
+    <label for="idDtInicio">Início</label>
+    <input type="date" id="idDtInicio">
+    <input type="time" id="idTimeInicio">
+
+    <label for="idDtFim">Término</label>
+    <input type="date" id="idDtFim">
+    <input type="time" id="idTimeFim">
+
+  </div>
+
+  <div>
+    <button type="button">Salvar</button>
+  </div>
+</div>
