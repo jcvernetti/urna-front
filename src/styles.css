@@ -1,1 +1,13 @@
-/* You can add global styles to this file, and also import other style files */
+h3 {
+  text-align: center;
+}
+
+div {
+  text-align: center;
+  margin: 50px;
+}
+
+input {
+  margin-bottom: 30px;
+  margin-left: 5px;
+}
