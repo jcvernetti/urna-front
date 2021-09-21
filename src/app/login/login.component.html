@@ -2,12 +2,12 @@
   <h3>Login</h3>
 
   <label for="idUsuario">Usuário:</label>
-  <input type="text" id="idUsuario">
+  <input type="text" name="nmUsuario" id="idUsuario" [(ngModel)]="usuario" >
   <br>
 
   <label for="idSenha">Senha:</label>
-  <input type="password" id="idSenha">
+  <input type="password" name="nmUsuario" id="idSenha" [(ngModel)]="senha" >
   <br>
-  
-  <button type="button" id="idBtnLogin">Login</button>
+
+  <button type="submit" id="idBtnLogin" (click)="logar()">Login</button>
 </div>

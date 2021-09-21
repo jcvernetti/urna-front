@@ -5,14 +5,14 @@
     <h4>Cadastro de Candidatos</h4>
 
     <label for="idNomeCandidato">Nome</label>
-    <input type="text" id="idNomeCandidato">
+    <input type="text" id="idNome" name="nmNome" [(ngModel)]="nome">
     <br>
 
-    <label for="idCodCandidato">Código</label>
-    <input type="number" id="idCodCandidato">
+    <label for="idCodigo">Código</label>
+    <input type="number" id="idCodigo" name="nmCodigo" [(ngModel)]="numero">
     <br>
 
-    <button type="button">Adicionar</button>
+    <button type="button" (click)="adicionarCandidato()">Adicionar</button>
 
   </div>
 

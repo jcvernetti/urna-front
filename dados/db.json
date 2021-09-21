@@ -1,0 +1,21 @@
+{
+  "admin": [
+    {
+      "id": 1,
+      "usuario": "admin",
+      "senha": "admin"
+    }
+  ],
+  "candidatos": [
+    {
+      "id": 1,
+      "nome": "",
+      "numero": 0
+    },
+    {
+      "nome": "Stephanny",
+      "numero": 18,
+      "id": 2
+    }
+  ]
+}
