@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="!isLogado()">
   <h3>Login</h3>
 
   <label for="idUsuario">Usuário:</label>
@@ -9,5 +9,10 @@
   <input type="password" name="nmUsuario" id="idSenha" [(ngModel)]="senha" >
   <br>
 
-  <button type="submit" id="idBtnLogin" (click)="logar()">Login</button>
+  <output *ngIf="isLoginInvalido">Usuário/Senha Inválidos</output>
+  <br><br>
+
+  <button type="button" id="idBtnLogin" (click)="logar()">Login</button>
 </div>
+
+

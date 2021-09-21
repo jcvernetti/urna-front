@@ -7,12 +7,16 @@ import { LoginComponent } from './login/login.component';
 import { AdminComponent } from './admin/admin.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { VotacaoComponent } from './votacao/votacao.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
-  declarations: [
+  declarations: [		
     AppComponent,
       LoginComponent,
-      AdminComponent
+      AdminComponent,
+      VotacaoComponent,
+      PageNotFoundComponent
    ],
   imports: [
     BrowserModule,

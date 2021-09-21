@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { DadosService } from '../service/dados.service';
 
@@ -8,7 +9,7 @@ import { DadosService } from '../service/dados.service';
 })
 export class AdminComponent implements OnInit {
 
-  constructor(private service: DadosService) { }
+  constructor(private service: DadosService, private router: Router) { }
 
   nome: string = "";
   numero: number = 0;
@@ -20,17 +21,13 @@ export class AdminComponent implements OnInit {
   dtFim: Date = new Date();
   timeFim: Date = new Date();
 
-
   public adicionarCandidato(){
     let candidato ={
       nome: this.nome,
       numero: this.numero
     }
     this.service.enviarCandidato(candidato).subscribe(resultado =>{
-      console.log(resultado);
-
       this.resultado = resultado
-
     })
 
   }
@@ -46,14 +43,22 @@ export class AdminComponent implements OnInit {
 
     this.service.configEleicao(config).subscribe(resultado => {
       console.log(resultado);
-
-
+      this.router.navigate(["/", "votacao"])
     })
   }
 
+  public isLogado(){
+    if (localStorage.getItem("isLogado") != "true") {
+      this.router.navigate(["/", "login"])
+    }
+    return true
+  }
 
-
-
+  public sair(){
+    localStorage.removeItem("isLogado");
+    localStorage.setItem("isLogado", "false");
+    this.router.navigate(["/", "login"])
+  }
 
   ngOnInit() {
   }

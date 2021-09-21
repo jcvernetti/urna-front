@@ -1,4 +1,5 @@
-<div>
+<div *ngIf="isLogado()">
+  <a (click)="sair()">Sair</a>
   <h3>Configuração da Eleição</h3>
 
   <div>
@@ -43,5 +44,6 @@
 
   <div>
     <button type="button" (click)="configurarEleicao()">Salvar</button>
+
   </div>
 </div>

@@ -10,9 +10,11 @@ import { Iniciarvotacao } from 'models/iniciareleicao.models';
 })
 export class DadosService {
 
+  private _isLogado: boolean = false;
+
   constructor(private httpClient: HttpClient) { }
 
-  private url = "http://localhost:3000/"
+  private url = "http://localhost:8080/"
 
   public verificarLogin(usuario: string, senha: string): Observable<Admin[]>{
 
@@ -28,8 +30,10 @@ export class DadosService {
   }
 
 
-
-
-
-
+  public get isLogado(): boolean {
+    return this._isLogado;
+  }
+  public set isLogado(value: boolean) {
+    this._isLogado = value;
+  }
 }

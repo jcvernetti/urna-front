@@ -4,6 +4,11 @@
       "id": 1,
       "usuario": "admin",
       "senha": "admin"
+    },
+    {
+      "usuario": "admin",
+      "senha": "admin",
+      "id": 2
     }
   ],
   "candidatos": [
