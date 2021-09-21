@@ -12,6 +12,14 @@ export class AdminComponent implements OnInit {
 
   nome: string = "";
   numero: number = 0;
+  resultado: any;
+
+  tipoEleicao: string = "";
+  dtInicio: Date = new Date();
+  timeInicio: Date = new Date();
+  dtFim: Date = new Date();
+  timeFim: Date = new Date();
+
 
   public adicionarCandidato(){
     let candidato ={
@@ -21,8 +29,26 @@ export class AdminComponent implements OnInit {
     this.service.enviarCandidato(candidato).subscribe(resultado =>{
       console.log(resultado);
 
+      this.resultado = resultado
+
     })
 
+  }
+
+  public configurarEleicao(){
+    let config = {
+      tipoEleicao: this.tipoEleicao,
+      dtInicio: this.dtInicio,
+      timeInicio: this.timeInicio,
+      dtFim: this.dtFim,
+      timeFim: this.timeFim
+    }
+
+    this.service.configEleicao(config).subscribe(resultado => {
+      console.log(resultado);
+
+
+    })
   }
 
 

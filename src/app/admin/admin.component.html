@@ -14,13 +14,15 @@
 
     <button type="button" (click)="adicionarCandidato()">Adicionar</button>
 
+    <output id="outSalvou"></output>
+
   </div>
 
   <div>
     <h4>Configurações da eleição</h4>
 
     <label for="idTipoEleicao">Tipo de eleição</label>
-    <input list="tipoEleicao" id="idTipoEleicao">
+    <input list="tipoEleicao" id="idTipoEleicao" name="nmTipoEleicao" [(ngModel)]="tipoEleicao">
     <datalist id="tipoEleicao">
       <option value="Presidente"></option>
       <option value="Governador"></option>
@@ -30,16 +32,16 @@
     <br>
 
     <label for="idDtInicio">Início</label>
-    <input type="date" id="idDtInicio">
-    <input type="time" id="idTimeInicio">
+    <input type="date" id="idDtInicio" name="nmDtInicio" [(ngModel)]="dtInicio">
+    <input type="time" id="idTimeInicio" name="nmTimeInicio" [(ngModel)]="timeInicio">
     <br>
 
     <label for="idDtFim">Término</label>
-    <input type="date" id="idDtFim">
-    <input type="time" id="idTimeFim">
+    <input type="date" id="idDtFim" name="nmDtFim" [(ngModel)]="dtFim">
+    <input type="time" id="idTimeFim" name="nmTimeFim" [(ngModel)]="timeFim">
   </div>
 
   <div>
-    <button type="button">Salvar</button>
+    <button type="button" (click)="configurarEleicao()">Salvar</button>
   </div>
 </div>

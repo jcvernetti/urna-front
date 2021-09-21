@@ -11,11 +11,16 @@
       "id": 1,
       "nome": "",
       "numero": 0
-    },
+    }
+  ],
+  "iniciarvotacao": [
     {
-      "nome": "Stephanny",
-      "numero": 18,
-      "id": 2
+      "id": 1,
+      "tipoEleicao": "",
+      "dtInicio": "Tue Sep 21 2021 13:03:17 GMT-0300 (Brasilia Standard Time)",
+      "timeInicio": "Tue Sep 21 2021 13:03:17 GMT-0300 (Brasilia Standard Time)",
+      "dtFim": "Tue Sep 21 2021 13:03:17 GMT-0300 (Brasilia Standard Time)",
+      "timeFim": "Tue Sep 21 2021 13:03:17 GMT-0300 (Brasilia Standard Time)"
     }
   ]
 }
