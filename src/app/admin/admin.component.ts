@@ -41,11 +41,11 @@ export class AdminComponent implements OnInit {
 
   public configurarEleicao(){
     let config = {
-      tipoEleicao: this.tipoEleicao,
-      dtInicio: this.dtInicio,
-      timeInicio: this.timeInicio,
-      dtFim: this.dtFim,
-      timeFim: this.timeFim
+      _tipoEleicao: this.tipoEleicao,
+      _dtInicio: this.dtInicio,
+      _timeInicio: this.timeInicio,
+      _dtFim: this.dtFim,
+      _timeFim: this.timeFim
     }
 
     this.service.configEleicao(config).subscribe(resultado => {
