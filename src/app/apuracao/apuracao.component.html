@@ -1,20 +1,37 @@
 <div>
-<h3>Relatório</h3>
+<h3>Resultado</h3>
 
 <table>
   <thead>
-    <th>Posição</th>
     <th>Código</th>
     <th>Candidato</th>
-    <th>Candidato</th>
+    <th>Qtde Votos</th>
+    <th>% de votos</th>
   </thead>
 
   <tbody>
-<!--     <tr>
-      <td>{{}}</td>
-      <td>{{}}</td>
-      <td>{{}}</td>
-    </tr> -->
+    <tr *ngFor="let candidato of this.apuracao._validos">
+      <td>{{candidato._numero}}</td>
+      <td>{{candidato._nome}}</td>
+      <td>{{candidato._qtde}}</td>
+      <td>{{candidato._percentual | number: '1.2-2'}}</td>
+    </tr>
+
+    <tr>
+      <td>-</td>
+      <td>Brancos</td>
+      <td>{{this.apuracao._brancos}}</td>
+      <td>{{this.porcentagemBrancos | number: '1.2-2'}}</td>
+
+    </tr>
+
+    <tr>
+      <td>-</td>
+      <td>Nulos</td>
+      <td>{{this.apuracao._nulos}}</td>
+      <td>{{this.porcentagemNulos | number: '1.2-2'}}</td>
+
+    </tr>
 </table>
 
 </div>

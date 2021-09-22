@@ -11,6 +11,9 @@ import { Component, OnInit } from '@angular/core';
 export class ApuracaoComponent implements OnInit {
 
  apuracao: ApuracaoGeral = {_validos: [], _nulos: 0, _brancos: 0, _total: 0, _totalValidos: 0};
+ porcentagemBrancos: number = 0;
+ porcentagemNulos: number = 0;
+
 
   constructor(private service: DadosService) { }
 
@@ -20,6 +23,9 @@ export class ApuracaoComponent implements OnInit {
       this.apuracao._validos = this.apuracao._validos.sort(this.ordenarpuracao)
 
       console.log(this.apuracao._validos);
+
+      this.porcentagemBrancos = this.calcularPorcentagem(this.apuracao._brancos)
+      this.porcentagemNulos = this.calcularPorcentagem(this.apuracao._nulos)
     })
   }
 
@@ -31,6 +37,12 @@ export class ApuracaoComponent implements OnInit {
       return 1
     }
     else return 0
+  }
+
+  public calcularPorcentagem(voto: number): number{
+    let tipoVoto = voto
+    let porcentagem = (tipoVoto/ this.apuracao._total) * 100
+    return porcentagem
   }
 
 }
