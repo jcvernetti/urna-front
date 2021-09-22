@@ -25,6 +25,10 @@ export class DadosService {
     return this.httpClient.post<Object>(this.url+"candidatos", candidato)
   }
 
+  public enviarVoto(voto: Object): Observable<object>{
+    return this.httpClient.post<Object>(this.url + "votacao", voto);
+  }
+
   public configEleicao(config: Iniciarvotacao): Observable<Object>{
     return this.httpClient.post<Object>(this.url + "iniciarvotacao", config)
   }
