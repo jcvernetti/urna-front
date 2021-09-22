@@ -11,8 +11,8 @@ export const routes: Routes = [
   {path: "login", component: LoginComponent},
   {path: "admin", component: AdminComponent},
   {path: "votacao", component: VotacaoComponent},
+  {path: "apuracao", component: ApuracaoComponent},
   {path: "**", component: PageNotFoundComponent},
-  {path: "apuracao", component: ApuracaoComponent}
 ]
 
 @NgModule({
