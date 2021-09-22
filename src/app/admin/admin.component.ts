@@ -14,7 +14,7 @@ export class AdminComponent implements OnInit {
 
   nome: string = "";
   numero: number = 0;
-  resultado: any;
+  resultado: any = 0;
 
   tipoEleicao: string = "";
   dtInicio: Date = new Date();
@@ -28,10 +28,16 @@ export class AdminComponent implements OnInit {
       _numero: this.numero
     }
     this.service.enviarCandidato(candidato).subscribe(resultado =>{
-      this.resultado = resultado
+      this.resultado = resultado;
+      setTimeout(()=>{
+        this.resultado = "";
+    }, 1000);
+      //console.log(this.resultado.mensagem);
     })
 
   }
+
+
 
   public configurarEleicao(){
     let config = {
