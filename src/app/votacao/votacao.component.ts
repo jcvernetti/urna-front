@@ -12,7 +12,7 @@ export class VotacaoComponent implements OnInit {
 
   nomeCandidato: string = "";
   numeroCandidato: string = "";
-  private elementoDesabilitado: Boolean = false;
+  private _elementoDesabilitado: Boolean = false;
   private _candidatos: Array<Candidato> = [];
 
   constructor(private service: DadosService, private router: Router) { }
@@ -31,6 +31,14 @@ export class VotacaoComponent implements OnInit {
 		this._candidatos = value;
 	}
 
+  public get elementoDesabilitado(): Boolean  {
+		return this._elementoDesabilitado;
+	}
+
+  public set elementoDesabilitado(value: Boolean ) {
+		this._elementoDesabilitado = value;
+	}
+
   public getNomeCandidato(){
     let auxCandidato: any = this.candidatos.find(candidato => candidato._numero == Number(this.numeroCandidato));
 
@@ -46,11 +54,11 @@ export class VotacaoComponent implements OnInit {
   }
 
   public votar(){
-    let nome: string = this.nomeCandidato == undefined ? "Nulo": this.nomeCandidato;
-    let numero: number =  isNaN(Number(this.numeroCandidato)) ? -1: Number(this.numeroCandidato);
+    this.nomeCandidato = this.nomeCandidato == undefined ? "Nulo": this.nomeCandidato;
+    this.numeroCandidato =  isNaN(Number(this.numeroCandidato)) ? "-1": this.numeroCandidato;
     let dataVoto: Date = new Date();
 
-    let voto: object = {nomeCandidato: nome, numeroCandidato: numero, dataVoto};
+    let voto: object = {nomeCandidato: this.nomeCandidato, numeroCandidato: Number(this.numeroCandidato), dataVoto};
 
     this.enviarVoto(voto);
   }
@@ -60,15 +68,22 @@ export class VotacaoComponent implements OnInit {
     this.numeroCandidato = "0";
     let dataVoto: Date = new Date();
 
-    let voto: object = {nomeCandidato: this.nomeCandidato, numeroCandidato: this.numeroCandidato, dataVoto};
+    let voto: object = {nomeCandidato: this.nomeCandidato, numeroCandidato: Number(this.numeroCandidato), dataVoto};
 
     this.enviarVoto(voto);
   }
 
   private enviarVoto(voto: Object): void{
-    this.service.enviarVoto(voto).subscribe((resposta) => {
-      console.log(resposta);
-    });
+    this.elementoDesabilitado = true;
+
+    setTimeout(() => {
+      this.service.enviarVoto(voto).subscribe((resposta) => {
+        console.log(resposta);
+      });
+
+      this.limparTela();
+      this.elementoDesabilitado = false ;
+    }, 2000);
   }
 
   public limparTela(){
