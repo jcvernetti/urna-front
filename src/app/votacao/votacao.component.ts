@@ -51,7 +51,17 @@ export class VotacaoComponent implements OnInit {
     let dataVoto: Date = new Date();
 
     let voto: object = {nomeCandidato: nome, numeroCandidato: numero, dataVoto};
-    
+
+    this.enviarVoto(voto);
+  }
+
+  public votarBranco(){
+    this.nomeCandidato = "Branco";
+    this.numeroCandidato = "0";
+    let dataVoto: Date = new Date();
+
+    let voto: object = {nomeCandidato: this.nomeCandidato, numeroCandidato: this.numeroCandidato, dataVoto};
+
     this.enviarVoto(voto);
   }
 
