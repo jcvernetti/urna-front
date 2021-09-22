@@ -29,6 +29,9 @@ export class DadosService {
     return this.httpClient.post<Object>(this.url + "iniciarvotacao", config)
   }
 
+  public getAllCandidatos(): Observable<Array<Candidato>>{
+    return this.httpClient.get<Array<Candidato>>(this.url + "candidatos",)
+  }
 
   public get isLogado(): boolean {
     return this._isLogado;
