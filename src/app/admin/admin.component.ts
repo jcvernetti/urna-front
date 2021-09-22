@@ -1,3 +1,4 @@
+import { Candidato } from './../../../models/candidato.models';
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { DadosService } from '../service/dados.service';
@@ -22,9 +23,9 @@ export class AdminComponent implements OnInit {
   timeFim: Date = new Date();
 
   public adicionarCandidato(){
-    let candidato ={
-      nome: this.nome,
-      numero: this.numero
+    let candidato: Candidato ={
+      _nome: this.nome,
+      _numero: this.numero
     }
     this.service.enviarCandidato(candidato).subscribe(resultado =>{
       this.resultado = resultado

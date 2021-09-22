@@ -1,5 +1,5 @@
 export interface Candidato {
-  id?: number;
-  nome: string;
-  numero: number;
+  _id?: number;
+  _nome: string;
+  _numero: number;
 }
