@@ -1,5 +1,5 @@
 export interface Admin {
-  id?: number;
-  usuario: string;
-  senha: string;
+  _id?: number;
+  _usuario: string;
+  _senha: string;
 }

@@ -1,7 +1,7 @@
 export interface Iniciarvotacao {
-  tipoEleicao: string;
-  dtInicio: Date;
-  timeInicio: Date;
-  dtFim: Date;
-  timeFim: Date;
+  _tipoEleicao: string;
+  _dtInicio: Date;
+  _timeInicio: Date;
+  _dtFim: Date;
+  _timeFim: Date;
 }
