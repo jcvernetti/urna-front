@@ -9,14 +9,16 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { VotacaoComponent } from './votacao/votacao.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { ApuracaoComponent } from './apuracao/apuracao.component';
 
 @NgModule({
-  declarations: [		
+  declarations: [
     AppComponent,
       LoginComponent,
       AdminComponent,
       VotacaoComponent,
-      PageNotFoundComponent
+      PageNotFoundComponent,
+      ApuracaoComponent
    ],
   imports: [
     BrowserModule,
