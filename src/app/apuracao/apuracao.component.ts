@@ -20,7 +20,7 @@ export class ApuracaoComponent implements OnInit {
   ngOnInit() {
     this.service.getApuracaoGeral().subscribe((resultado: ApuracaoGeral) => {
       this.apuracao = resultado;
-      this.apuracao._validos = this.apuracao._validos.sort(this.ordenarpuracao)
+      this.apuracao._validos = this.apuracao._validos.sort(this.ordenarApuracao)
 
       console.log(this.apuracao._validos);
 
@@ -29,7 +29,8 @@ export class ApuracaoComponent implements OnInit {
     })
   }
 
-  public ordenarpuracao(a: any,b:any): number{
+
+  private ordenarApuracao(a: any,b:any): number{
     if (a._qtde > b._qtde){
       return -1
     }
@@ -39,7 +40,7 @@ export class ApuracaoComponent implements OnInit {
     else return 0
   }
 
-  public calcularPorcentagem(voto: number): number{
+  private calcularPorcentagem(voto: number): number{
     let tipoVoto = voto
     let porcentagem = (tipoVoto/ this.apuracao._total) * 100
     return porcentagem
