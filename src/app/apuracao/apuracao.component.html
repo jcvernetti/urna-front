@@ -19,7 +19,7 @@
           <td>{{candidato._percentual | number: '1.2-2'}}</td>
         </tr>
 
-        <tr>
+        <tr *ngIf="this.apuracao._brancos > this.apuracao._nulos; else nulos ">
           <td>-</td>
           <td>Brancos</td>
           <td>{{this.apuracao._brancos}}</td>
@@ -27,13 +27,33 @@
 
         </tr>
 
-        <tr>
+        <tr *ngIf="this.apuracao._nulos < this.apuracao._brancos; else brancos">
           <td>-</td>
           <td>Nulos</td>
           <td>{{this.apuracao._nulos}}</td>
           <td>{{this.porcentagemNulos | number: '1.2-2'}}</td>
 
         </tr>
+
+        <ng-template #nulos>
+          <tr>
+            <td>-</td>
+            <td>Nulos</td>
+            <td>{{this.apuracao._nulos}}</td>
+            <td>{{this.porcentagemNulos | number: '1.2-2'}}</td>
+
+          </tr>
+        </ng-template>
+
+        <ng-template #brancos>
+          <tr>
+            <td>-</td>
+            <td>Brancos</td>
+            <td>{{this.apuracao._brancos}}</td>
+            <td>{{this.porcentagemBrancos | number: '1.2-2'}}</td>
+
+          </tr>
+        </ng-template>
     </table>
   </div>
 </div>
