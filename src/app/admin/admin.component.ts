@@ -32,12 +32,9 @@ export class AdminComponent implements OnInit {
       setTimeout(()=>{
         this.resultado = "";
     }, 1000);
-      //console.log(this.resultado.mensagem);
     })
 
   }
-
-
 
   public configurarEleicao(){
     let config = {
