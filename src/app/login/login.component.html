@@ -1,18 +1,25 @@
-<div *ngIf="!isLogado()">
-  <h3>Login</h3>
+<div class="externa h-100">
+  <div class="container" *ngIf="!isLogado()">
+    <form class="formulario">
 
-  <label for="idUsuario">Usuário:</label>
-  <input type="text" name="nmUsuario" id="idUsuario" [(ngModel)]="usuario" >
-  <br>
+      <h1 class="text-center">Login</h1>
 
-  <label for="idSenha">Senha:</label>
-  <input type="password" name="nmUsuario" id="idSenha" [(ngModel)]="senha" >
-  <br>
+        <div class="form-field">
+          <label class="form-field__label" for="idUsuario">Usuário:</label>
+          <input type="text" class="form-field__input" name="nmUsuario" id="idUsuario" [(ngModel)]="usuario">
+        </div>
 
-  <output *ngIf="isLoginInvalido">Usuário/Senha Inválidos</output>
-  <br><br>
+        <div class="form-field">
+          <label class="form-field__label" for="idSenha">Senha:</label>
+          <input type="password" class="form-field__input" name="nmUsuario" id="idSenha" [(ngModel)]="senha">
+        </div>
 
-  <button type="button" id="idBtnLogin" (click)="logar()">Login</button>
+      <output *ngIf="isLoginInvalido">Usuário/Senha Inválidos</output>
+      <br>
+      <div class="text-center m-0 p-0">
+        <button type="button" class="btn btn-primary m-1 " id="idBtnLogin" (click)="logar()">&nbsp;Login&nbsp;</button>
+        <button type="reset" class="btn btn-secondary m-1" >Limpar</button>
+      </div>
+    </form>
+  </div>
 </div>
-
-
