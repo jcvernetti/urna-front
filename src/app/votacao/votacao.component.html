@@ -1,4 +1,4 @@
-<div *ngIf="isLogado()">
+<div class="externa m-0">
   <div class="container">
     <form class="formulario">
       <h1 class="text-center">Urna</h1>
@@ -15,10 +15,10 @@
           <input type="text" name="nmNomeDoCandidato" class="form-field__input" id="idNomeDoCandidato" [value]="nomeCandidato" disabled>
       </div>
 
-      <div class="botao-wrapper">
-          <button type="button" class="botao botao--votar" (click)="votar()">Confirmar</button>
-          <button type="reset" class="botao botao--cancelar">Cancelar</button>
-          <button type="button" class="botao botao--branco" (click)="votarBranco()">Banco</button>
+      <div class="text-center m-0 p-4">
+          <button type="button" class="btn btn-success m-1" (click)="votar()"        >Confirmar</button>
+          <button type="reset" class="btn btn-warning m-1"                           >Cancelar&nbsp;</button>
+          <button type="button" class="btn btn-secondary m-1" (click)="votarBranco()">&nbsp;&nbsp;Branco&nbsp;&nbsp;</button>
       </div>
     </form>
   </div>
