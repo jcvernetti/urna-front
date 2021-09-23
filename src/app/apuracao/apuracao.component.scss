@@ -1,0 +1,22 @@
+.resultado {
+  background-color: white;
+  padding: 16px;
+  border-radius: 10px;
+  filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.4));
+
+}
+
+.div {
+  height: auto;
+  align-items: center;
+  display: block;
+  justify-content: center;
+}
+
+.div2 {
+  height: auto;
+  align-items: center;
+  display: flow-root;
+  justify-content: center;
+}
+
