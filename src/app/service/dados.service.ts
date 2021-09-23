@@ -1,3 +1,4 @@
+import { ApuracaoGeral } from './../../../models/apuracaoGeral.models';
 import { Candidato } from '../../../models/candidato.models';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -32,6 +33,21 @@ export class DadosService {
   public getAllCandidatos(): Observable<Array<Candidato>>{
     return this.httpClient.get<Array<Candidato>>(this.url + "candidatos",)
   }
+
+
+
+  //COPIAR ANTES DE DAR PUSH OU PULL
+
+  public getApuracaoGeral(): Observable<ApuracaoGeral>{
+    return this.httpClient.get<ApuracaoGeral>(this.url + "apuracao")
+  }
+
+  //COPIAR ANTES DE DAR PUSH OU PULL
+
+
+
+
+
 
   public get isLogado(): boolean {
     return this._isLogado;
