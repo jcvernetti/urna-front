@@ -1,51 +1,141 @@
-<div *ngIf="isLogado()">
-  <a (click)="sair()">Sair</a>
-  <h3>Configuração da Eleição</h3>
+<div class="externa bg-light" *ngIf="isLogado()">
+  <div class="container">
+    <div class="border rounded">
+      <nav class="nav justify-content-center">
+          <div class="nav nav-tabs" id="nav-tab" role="tablist">
+              <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Cadastrar candidatos</button>
+              <button [classList]="mutarButao()" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Configurar eleição</button>
+          </div>
+      </nav>
+    </div>
 
-  <div>
-    <h4>Cadastro de Candidatos</h4>
+    <div class="tab-content" id="nav-tabContent">
+      <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+          <div class="card border">
+            <div class="card-body">
+              <div class="row g-0 h-100 align-self-center align-items-center">
+                <div class="col-md-6">
+                  <table class="table table-borderless">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Nome</th>
+                        <th>Numero</th>
+                        <th></th>
+                      </tr>
+                    </thead>
 
-    <label for="idNomeCandidato">Nome</label>
-    <input type="text" id="idNome" name="nmNome" [(ngModel)]="nome">
-    <br>
+                    <tbody *ngFor="let candidato of candidatos">
+                      <tr>
+                        <td>{{candidato._id}}</td>
+                        <td>{{candidato._nome}}</td>
+                        <td>{{candidato._numero}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
 
-    <label for="idCodigo">Código</label>
-    <input type="number" id="idCodigo" name="nmCodigo" [(ngModel)]="numero">
-    <br>
+                  <span *ngIf="candidatos.length == 0">Nenhm candidato cadastrado !!!</span>
 
-    <output>{{this.resultado.mensagem}}</output>
-    <br>
-    <button type="button" (click)="adicionarCandidato()">Adicionar</button>
+                </div>
 
-    <output id="outSalvou"></output>
+                <div class="col-md-6">
+                  <div class="form-field m-3" style="width: 95%;">
+                    <label for="inputNomeCandidato" class="form-field__label">Nome do candidato: </label>
+                    <input type="text" id="inputNomeCandidato" class="form-field__input" [(ngModel)]="nome">
+                  </div>
 
-  </div>
+                  <div class="form-field m-3" style="width: 95%;">
+                    <label for="inputNumeroCandidato" class="form-field__label">Numero do candidato:</label>
+                    <input type="text" id="inputNumeroCandidato" class="form-field__input" [(ngModel)]="numero">
+                  </div>
 
-  <div>
-    <h4>Configurações da eleição</h4>
+                  <span *ngIf="isCandidatoExistente" class="m-0 p-0">Numero de candidato já cadastrado !</span>
 
-    <label for="idTipoEleicao">Tipo de eleição</label>
-    <input list="tipoEleicao" id="idTipoEleicao" name="nmTipoEleicao" [(ngModel)]="tipoEleicao">
-    <datalist id="tipoEleicao">
-      <option value="Presidente"></option>
-      <option value="Governador"></option>
-      <option value="Prefeito"></option>
+                  <span *ngIf="isCandidatoInvalido" class="m-0 p-0">Candidato inválido !</span>
 
-    </datalist>
-    <br>
+                  <span *ngIf="candidatos.length == 5">Quantidade máxima de candidatos atingida !</span>
 
-    <label for="idDtInicio">Início</label>
-    <input type="date" id="idDtInicio" name="nmDtInicio" [(ngModel)]="dtInicio">
-    <input type="time" id="idTimeInicio" name="nmTimeInicio" [(ngModel)]="timeInicio">
-    <br>
+                  <div class="text-center">
+                    <button type="button" class="btn btn-success m-1" [disabled]="candidatos.length == 5" (click)="adicionarCandidato()">Cadastrar</button>
+                    <button type="button" class="btn btn-secondary m-1" (click)="limparTela()">Limpar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-    <label for="idDtFim">Término</label>
-    <input type="date" id="idDtFim" name="nmDtFim" [(ngModel)]="dtFim">
-    <input type="time" id="idTimeFim" name="nmTimeFim" [(ngModel)]="timeFim">
-  </div>
+            <div class="card-footer text-center text-muted p-3"></div>
+          </div>
+      </div>
 
-  <div>
-    <button type="button" (click)="configurarEleicao()">Salvar</button>
+      <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            <div class="card border">
+                <div class="card-body col-10 align-self-center">
 
+                  <ng-container *ngIf="candidatos.length < 3">
+                    <div class="row align-self-center align-items-center h-100">
+                      <h4>Quantidade mínima de 3 candidatos não atingida !!!</h4>
+                    </div>
+                  </ng-container>
+
+                  <ng-container *ngIf="candidatos.length >= 3">
+                    <div class="form-field p-2">
+                      <label for="idTipoEleicao" class="form-field__label">Tipo de eleição: </label>
+                      <input list="tipoEleicao" id="idTipoEleicao" class="form-field__input" [(ngModel)]="tipoEleicao">
+                      <datalist id="tipoEleicao">
+                        <option value="Presidente"></option>
+                        <option value="Governador"></option>
+                        <option value="Prefeito"></option>
+                      </datalist>
+                    </div>
+
+                    <div class="row g-1 m-0 p-2">
+                      <div class="col">
+                        <div class="form-field m-0 p-0">
+                          <label class="form-field__label">Data de início</label>
+                          <input type="date" class="form-field__input" [value]="dtInicio | date:'yyyy-MM-dd'" (input)="dtInicio" >
+                        </div>
+                      </div>
+
+                      <div class="col">
+                        <div class="form-field m-0 p-0">
+                          <label class="form-field__label">Horário de início</label>
+                          <input type="time" class="form-field__input" [value]="'09:00'" (input)="timeInicio">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row g-1 p-2 m-0">
+                      <div class="col">
+                        <div class="form-field m-0 p-0">
+                          <label class="form-field__label">Data de término</label>
+                          <input type="date" class="form-field__input" [value]="dtFim | date:'yyyy-MM-dd'" (input)="dtFim">
+                        </div>
+                      </div>
+
+                      <div class="col">
+                        <div class="form-field m-0 p-0">
+                          <label class="form-field__label">Horário de término</label>
+                          <input type="time" class="form-field__input" [value]="'09:00'" (input)="timeFim">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="text-center m-2">
+                      <button type="button" class="btn btn-primary m-1" [disabled]="isVotacaoEmCurso" (click)="configurarEleicao()">Iniciar votação</button>
+                      <button type="button" class="btn btn-danger m-1" [hidden]="!isVotacaoEmCurso" (click)="cancelarEleicao()">Cancelar votação</button>
+                    </div>
+                  </ng-container>
+                </div>
+
+              <div class="card-footer text-center text-muted p-3"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="m-3">
+      <button type="button" class="btn btn-outline-danger" (click)="sair()">&nbsp;Sair&nbsp;</button>
+    </div>
   </div>
 </div>
