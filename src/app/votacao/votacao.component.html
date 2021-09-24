@@ -1,25 +1,49 @@
-<div class="externa m-0">
-  <div class="container">
-    <form class="formulario">
-      <h1 class="text-center">Urna</h1>
-      <div class="form-field">
+<ng-container *ngIf="isEspera()">
+  <div class="externa m-0">
+    <div class="container">
+      <div class="formulario">
+        <h1 class="text-center">A votação vai começar em:</h1>
+        <p class="text-center">{{dataTime | date: "dd/MM/yyyy HH:mm"}}</p>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="isResultado()">
+  <div class="externa m-0">
+    <div class="container">
+      <div class="formulario">
+        <h1 class="text-center">Votação Encerrada!</h1>
+        <p class="text-center"><a routerLink="../apuracao">Ir para Resultado</a></p>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="isVotacao()">
+  <div  class="externa m-0">
+    <div class="container">
+      <form class="formulario">
+        <h1 class="text-center">Urna</h1>
+        <div class="form-field">
           <label for="candidatos" class="form-field__label">N° do candidato: </label>
           <input list="candidatos" name="nmNumeroCandidato" id="inputCandidatos" disabled="{{elementoDesabilitado}}" class="form-field__input"  [(ngModel)]="numeroCandidato" (input)="getNomeCandidato()" autocomplete="off">
           <datalist id="candidatos">
             <option *ngFor="let candidato of candidatos" [value]="candidato._numero">{{candidato._nome}}</option>
           </datalist>
-      </div>
+        </div>
 
-      <div class="form-field">
-          <label for="idNomeDoCandidato" class="form-field__label">Nome do Candidato: </label>
-          <input type="text" name="nmNomeDoCandidato" class="form-field__input" id="idNomeDoCandidato" [value]="nomeCandidato" disabled>
-      </div>
+        <div class="form-field">
+            <label for="idNomeDoCandidato" class="form-field__label">Nome do Candidato: </label>
+            <input type="text" name="nmNomeDoCandidato" class="form-field__input" id="idNomeDoCandidato" [value]="nomeCandidato" disabled>
+        </div>
 
-      <div class="text-center m-0 p-4">
+        <div class="text-center m-0 p-4">
           <button type="button" class="btn btn-success m-1" (click)="votar()"        >Confirmar</button>
           <button type="reset" class="btn btn-warning m-1"                           >Cancelar&nbsp;</button>
           <button type="button" class="btn btn-secondary m-1" (click)="votarBranco()">&nbsp;&nbsp;Branco&nbsp;&nbsp;</button>
-      </div>
-    </form>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
+</ng-container>

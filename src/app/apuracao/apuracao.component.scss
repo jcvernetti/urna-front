@@ -1,0 +1,21 @@
+.resultado {
+  background-color: white;
+  border-radius: 10px;
+  filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.4));
+}
+
+.externa{
+  height: 100%;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin: 0;
+}
+
+.container {
+  width: 500px;
+  margin: 0 auto;
+  display: grid;
+}
+
+

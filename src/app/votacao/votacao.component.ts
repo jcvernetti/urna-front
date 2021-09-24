@@ -14,6 +14,7 @@ export class VotacaoComponent implements OnInit {
   numeroCandidato: string = "";
   private _elementoDesabilitado: Boolean = false;
   private _candidatos: Array<Candidato> = [];
+  dataTime: Date = new Date();
 
   constructor(private service: DadosService, private router: Router) { }
 
@@ -21,6 +22,8 @@ export class VotacaoComponent implements OnInit {
     this.service.getAllCandidatos().subscribe((auxCandidatos: Array<Candidato>) => {
       this.candidatos = auxCandidatos;
     });
+    this.getFimVotacao()
+    this.getInicioVotacao()
   }
 
   public get candidatos(): Array<Candidato>  {
@@ -89,5 +92,48 @@ export class VotacaoComponent implements OnInit {
   public limparTela(){
     this.nomeCandidato = "";
     this.numeroCandidato = "";
+  }
+
+  public getInicioVotacao(){
+    this.service.getInicioVotacao().subscribe(resultado => {
+      this.dataTime = new Date(`${resultado.dtInicio} ${resultado.timeInicio}`)
+
+      let timeDif = this.dataTime.valueOf() - new Date().valueOf()
+      console.log(timeDif);
+      if (timeDif > 0 ) {
+        this.service.alterarLocalStorage("espera", "true")
+        setTimeout(() => {
+          console.log("votacao iniciada");
+
+          this.service.alterarLocalStorage("espera", "false")
+          this.service.alterarLocalStorage("votacao","true")
+          this.service.alterarLocalStorage("resultado","false")
+        }, timeDif);
+      }
+    })
+  }
+
+  public getFimVotacao(){
+    this.service.getFimVotacao().subscribe(resultado => {
+      let dataTime = new Date(`${resultado.dtFim} ${resultado.timeFim}`)
+      let timeDif = dataTime.valueOf() - new Date().valueOf()
+      setTimeout(() => {
+        this.service.alterarLocalStorage("espera", "false")
+        this.service.alterarLocalStorage("votacao","false")
+        this.service.alterarLocalStorage("resultado","true")
+      }, timeDif);
+    })
+  }
+
+  public isEspera(){
+    return localStorage.getItem("espera") == "true"
+  }
+
+  public isVotacao(){
+    return localStorage.getItem("votacao") == "true"
+  }
+
+  public isResultado(){
+    return localStorage.getItem("resultado") == "true"
   }
 }

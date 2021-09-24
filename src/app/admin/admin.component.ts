@@ -27,13 +27,13 @@ export class AdminComponent implements OnInit {
       _nome: this.nome,
       _numero: this.numero
     }
+
     this.service.enviarCandidato(candidato).subscribe(resultado =>{
       this.resultado = resultado;
       setTimeout(()=>{
         this.resultado = "";
     }, 1000);
     })
-
   }
 
   public configurarEleicao(){
@@ -46,7 +46,9 @@ export class AdminComponent implements OnInit {
     }
 
     this.service.configEleicao(config).subscribe(resultado => {
-      console.log(resultado);
+      this.service.alterarLocalStorage("espera", "false")
+      this.service.alterarLocalStorage("votacao","false")
+      this.service.alterarLocalStorage("resultado","false")
       this.router.navigate(["/", "votacao"])
     })
   }
@@ -66,5 +68,4 @@ export class AdminComponent implements OnInit {
 
   ngOnInit() {
   }
-
 }

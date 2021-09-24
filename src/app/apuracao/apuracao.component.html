@@ -1,37 +1,57 @@
-<div>
-<h3>Resultado</h3>
+<div class="externa m-0">
+  <div class="container p-0 mb-0">
+    <div class="div resultado h-100 p-3">
+      <h1 class="text-center">Resultado</h1>
+      <table class="table table-striped table-responsive table-borderless text-center">
+        <thead class="table-dark">
+          <tr>
+            <th>Número</th>
+            <th>Candidato</th>
+            <th>Qtde Votos</th>
+            <th>% Votos</th>
+          </tr>
+        </thead>
 
-<table>
-  <thead>
-    <th>Código</th>
-    <th>Candidato</th>
-    <th>Qtde Votos</th>
-    <th>% de votos</th>
-  </thead>
+        <tbody>
+          <tr *ngFor="let candidato of this.apuracao._validos">
+            <td>{{candidato._numero}}</td>
+            <td>{{candidato._nome}}</td>
+            <td>{{candidato._qtde}}</td>
+            <td>{{candidato._percentual | number: '1.2-2'}}</td>
+          </tr>
 
-  <tbody>
-    <tr *ngFor="let candidato of this.apuracao._validos">
-      <td>{{candidato._numero}}</td>
-      <td>{{candidato._nome}}</td>
-      <td>{{candidato._qtde}}</td>
-      <td>{{candidato._percentual | number: '1.2-2'}}</td>
-    </tr>
+          <tr *ngIf="this.apuracao._brancos > this.apuracao._nulos; else nulos ">
+            <td>-</td>
+            <td>Brancos</td>
+            <td>{{this.apuracao._brancos}}</td>
+            <td>{{this.porcentagemBrancos | number: '1.2-2'}}</td>
+          </tr>
 
-    <tr>
-      <td>-</td>
-      <td>Brancos</td>
-      <td>{{this.apuracao._brancos}}</td>
-      <td>{{this.porcentagemBrancos | number: '1.2-2'}}</td>
+          <tr *ngIf="this.apuracao._nulos < this.apuracao._brancos; else brancos">
+            <td>-</td>
+            <td>Nulos</td>
+            <td>{{this.apuracao._nulos}}</td>
+            <td>{{this.porcentagemNulos | number: '1.2-2'}}</td>
+          </tr>
 
-    </tr>
+          <ng-template #nulos>
+            <tr>
+              <td>-</td>
+              <td>Nulos</td>
+              <td>{{this.apuracao._nulos}}</td>
+              <td>{{this.porcentagemNulos | number: '1.2-2'}}</td>
+            </tr>
+          </ng-template>
 
-    <tr>
-      <td>-</td>
-      <td>Nulos</td>
-      <td>{{this.apuracao._nulos}}</td>
-      <td>{{this.porcentagemNulos | number: '1.2-2'}}</td>
-
-    </tr>
-</table>
-
+          <ng-template #brancos>
+            <tr>
+              <td>-</td>
+              <td>Brancos</td>
+              <td>{{this.apuracao._brancos}}</td>
+              <td>{{this.porcentagemBrancos | number: '1.2-2'}}</td>
+            </tr>
+          </ng-template>
+      </table>
+    </div>
+  </div>
 </div>

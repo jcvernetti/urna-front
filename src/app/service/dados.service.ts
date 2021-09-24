@@ -12,13 +12,11 @@ import { Iniciarvotacao } from 'models/iniciareleicao.models';
 export class DadosService {
 
   private _isLogado: boolean = false;
+  private url = "http://localhost:8080/"
 
   constructor(private httpClient: HttpClient) { }
 
-  private url = "http://localhost:8080/"
-
   public verificarLogin(usuario: string, senha: string): Observable<Admin[]>{
-
     return this.httpClient.post<Admin[]>(this.url + "login", {usuario, senha})
   }
 
@@ -38,20 +36,22 @@ export class DadosService {
     return this.httpClient.get<Array<Candidato>>(this.url + "candidatos",)
   }
 
-
-
-  //COPIAR ANTES DE DAR PUSH OU PULL
-
   public getApuracaoGeral(): Observable<ApuracaoGeral>{
     return this.httpClient.get<ApuracaoGeral>(this.url + "apuracao")
   }
 
-  //COPIAR ANTES DE DAR PUSH OU PULL
+  public getInicioVotacao(): Observable<any>{
+    return this. httpClient.get<any>(this.url + "datainicio")
+  }
 
+  public getFimVotacao(): Observable<any> {
+    return this.httpClient.get<any>(this.url + "datafim")
+  }
 
-
-
-
+  public alterarLocalStorage(chave: string, valor: string){
+    localStorage.removeItem(chave)
+    localStorage.setItem(chave, valor)
+  }
 
   public get isLogado(): boolean {
     return this._isLogado;
