@@ -49,9 +49,13 @@ export class DadosService {
   //COPIAR ANTES DE DAR PUSH OU PULL
 
 
+  public getStatusVotacao(): Observable<any>{
+    return this.httpClient.get<any>(this.url + "statusvotacao")
+  }
 
-
-
+  public cancelarEleicao(): Observable<any>{
+    return this.httpClient.get<any>(this.url + "cancelarvotacao")
+  }
 
   public get isLogado(): boolean {
     return this._isLogado;
