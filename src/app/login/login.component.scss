@@ -1,23 +1,15 @@
-*{
-  margin:0;
-}
-
-.borda {
+.formulario {
   background-color: white;
+  padding: 16px;
   border-radius: 10px;
-  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.4));
-
-  &__top{
-    border-top: none;
-  }
+  filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.4));
 }
 
 .form-field {
-  width: 100%;
+  width: 95%;
   float: none;
   display: flex;
-  padding: 0;
-  margin: auto;
+  margin: 20px auto;
   flex-direction: column;
   color: var(--primary);
 
@@ -30,7 +22,7 @@
   }
 
   &__input {
-    padding: 5px;
+    padding: 8px;
     border-radius: 4px;
     color: inherit;
     border: 2px solid;
@@ -39,17 +31,19 @@
 }
 
 .container {
-  max-width: 600px;
+  max-width: 500px;
   margin: 0 auto;
 }
-
-.card {
-  height: 350px;
-}
-
 .externa{
   height: 100%;
-  display: flex;
   align-items: center;
+  display: flex;
   justify-content: center;
+  margin: 0;
+}
+
+@media (any-hover: hover) {
+  input:hover {
+    color: rgb(75, 129, 245);
+  }
 }

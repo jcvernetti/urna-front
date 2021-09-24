@@ -87,6 +87,10 @@ export class AdminComponent implements OnInit {
 
     this.service.configEleicao(config).subscribe(resultado => {
       this.votacaoEmCurso();
+      this.service.alterarLocalStorage("espera", "false")
+      this.service.alterarLocalStorage("votacao","false")
+      this.service.alterarLocalStorage("resultado","false")
+      this.router.navigate(["/", "votacao"])
     })
   }
 

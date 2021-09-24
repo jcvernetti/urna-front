@@ -1,0 +1,19 @@
+.formulario {
+  background-color: white;
+  padding: 16px;
+  border-radius: 10px;
+  filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.4));
+}
+
+.container {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.externa{
+  height: 100%;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin: 0;
+}
