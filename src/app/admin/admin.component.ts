@@ -40,7 +40,7 @@ export class AdminComponent implements OnInit {
 
   private atualizarListaCandidatos(){
     this.service.getAllCandidatos().subscribe(auxCandidatos =>{
-      this.candidatos = auxCandidatos;
+      this.candidatos = auxCandidatos == undefined ? [] : auxCandidatos;
     });
   }
 
@@ -116,7 +116,9 @@ export class AdminComponent implements OnInit {
   }
 
   public mutarButao(): string{
-    return this.candidatos.length >= 3 ? "nav-link" : "nav-link text-muted";
+    let qtdCandidatos: number = this.candidatos.length == undefined ? 0 : this.candidatos.length;
+
+    return qtdCandidatos >= 3 ? "nav-link" : "nav-link text-muted";
   }
 
   public limparTela(): void {
