@@ -1,14 +1,14 @@
-import { Apuracao } from './../../../models/apuracao.models';
-import { ApuracaoGeral } from './../../../models/apuracaoGeral.models';
-import { DadosService } from './../service/dados.service';
+import { Apuracao } from '../../../models/apuracao.models';
+import { ApuracaoGeral } from '../../../models/apuracaoGeral.models';
+import { DadosService } from '../service/dados.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-apuracao',
-  templateUrl: './apuracao.component.html',
-  styleUrls: ['./apuracao.component.scss']
+  selector: 'app-resultado',
+  templateUrl: './resultado.component.html',
+  styleUrls: ['./resultado.component.scss']
 })
-export class ApuracaoComponent implements OnInit {
+export class ResultadoComponent implements OnInit {
 
  apuracao: ApuracaoGeral = {_validos: [], _nulos: 0, _brancos: 0, _total: 0, _totalValidos: 0};
  porcentagemBrancos: number = 0;
