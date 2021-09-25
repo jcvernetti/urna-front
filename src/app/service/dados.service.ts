@@ -40,6 +40,14 @@ export class DadosService {
     return this.httpClient.get<ApuracaoGeral>(this.url + "apuracao")
   }
 
+  public getStatusVotacao(): Observable<any>{
+    return this.httpClient.get<any>(this.url + "statusvotacao")
+  }
+
+  public cancelarEleicao(): Observable<any>{
+    return this.httpClient.get<any>(this.url + "cancelarvotacao")
+  }
+
   public getInicioVotacao(): Observable<any>{
     return this. httpClient.get<any>(this.url + "datainicio")
   }
@@ -52,7 +60,6 @@ export class DadosService {
     localStorage.removeItem(chave)
     localStorage.setItem(chave, valor)
   }
-
   public get isLogado(): boolean {
     return this._isLogado;
   }
