@@ -1,4 +1,4 @@
-<div class="externa m-0">
+<div *ngIf="isResultado()" class="externa m-0">
   <div class="container p-0 mb-0">
     <div class="div resultado h-100 p-3">
       <h1 class="text-center">Resultado</h1>
@@ -51,7 +51,26 @@
               <td>{{this.porcentagemBrancos | number: '1.2-2'}}</td>
             </tr>
           </ng-template>
+        </tbody>
+
+        <tfoot class="table-dark">
+          <tr>
+            <th>Total:</th>
+            <td>{{apuracao._total}}</td>
+            <th>Votos válidos:</th>
+            <td>{{apuracao._totalValidos}}</td>
+          </tr>
+        </tfoot>
       </table>
     </div>
   </div>
 </div>
+
+  <div *ngIf="!isResultado()" class="externa m-0">
+    <div class="container">
+      <div class="resultado h-100 p-3">
+        <h1 class="text-center">A votação está em andamento.</h1>
+        <p class="text-center">O resultado estará disponível após o término da votação.</p>
+      </div>
+    </div>
+  </div>
