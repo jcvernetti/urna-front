@@ -1,14 +1,14 @@
-import { Apuracao } from './../../../models/apuracao.models';
-import { ApuracaoGeral } from './../../../models/apuracaoGeral.models';
-import { DadosService } from './../service/dados.service';
+import { Apuracao } from '../../../models/apuracao.models';
+import { ApuracaoGeral } from '../../../models/apuracaoGeral.models';
+import { DadosService } from '../service/dados.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-apuracao',
-  templateUrl: './apuracao.component.html',
-  styleUrls: ['./apuracao.component.scss']
+  selector: 'app-resultado',
+  templateUrl: './resultado.component.html',
+  styleUrls: ['./resultado.component.scss']
 })
-export class ApuracaoComponent implements OnInit {
+export class ResultadoComponent implements OnInit {
 
  apuracao: ApuracaoGeral = {_validos: [], _nulos: 0, _brancos: 0, _total: 0, _totalValidos: 0};
  porcentagemBrancos: number = 0;
@@ -18,6 +18,7 @@ export class ApuracaoComponent implements OnInit {
   constructor(private service: DadosService) { }
 
   ngOnInit() {
+    this.getFimVotacao()
     this.service.getApuracaoGeral().subscribe((resultado: ApuracaoGeral) => {
       this.apuracao = resultado;
       this.apuracao._validos = this.apuracao._validos.sort(this.ordenarApuracao)
@@ -44,6 +45,22 @@ export class ApuracaoComponent implements OnInit {
     let tipoVoto = voto
     let porcentagem = (tipoVoto/ this.apuracao._total) * 100
     return porcentagem
+  }
+
+  public getFimVotacao(){
+    this.service.getFimVotacao().subscribe(resultado => {
+      let dataTime = new Date(`${resultado.dtFim} ${resultado.timeFim}`)
+      let timeDif = dataTime.valueOf() - new Date().valueOf()
+      setTimeout(() => {
+        this.service.alterarLocalStorage("espera", "false")
+        this.service.alterarLocalStorage("votacao","false")
+        this.service.alterarLocalStorage("resultado","true")
+      }, timeDif);
+    })
+  }
+
+  public isResultado(){
+    return localStorage.getItem("resultado") == "true"
   }
 
 }
