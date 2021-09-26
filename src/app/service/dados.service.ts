@@ -56,6 +56,10 @@ export class DadosService {
     return this.httpClient.get<any>(this.url + "datafim")
   }
 
+  public getInfoVotacao(): Observable<any> {
+    return this.httpClient.get<any>(this.url + "infovotacao")
+  }
+
   public alterarLocalStorage(chave: string, valor: string){
     localStorage.removeItem(chave)
     localStorage.setItem(chave, valor)
