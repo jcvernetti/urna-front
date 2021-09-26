@@ -1,7 +1,10 @@
+import { async } from '@angular/core/testing';
 import { Candidato } from './../../../models/candidato.models';
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { DadosService } from '../service/dados.service';
+import { config } from 'rxjs';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-admin',
@@ -10,12 +13,18 @@ import { DadosService } from '../service/dados.service';
 })
 export class AdminComponent implements OnInit {
 
-  constructor(private service: DadosService, private router: Router) { }
+  constructor(private service: DadosService, private router: Router, public datepipe: DatePipe) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.atualizarListaCandidatos();
-    this.votacaoEmCurso();
-    this.dtFim.setDate(this.dtFim.getDate()+1)
+    await this.votacaoEmCurso();
+
+    if(!this.isVotacaoEmCurso){
+      this.timeInicio.setMinutes(this.timeInicio.getMinutes() + (5 - this.timeInicio.getMinutes() % 5));
+      this.timeFim.setMinutes(this.timeInicio.getMinutes() + 60);
+    } else {
+      await this.recuperarInfoVotacao();
+    }
   }
 
   private _nome: string = "";
@@ -44,10 +53,60 @@ export class AdminComponent implements OnInit {
     });
   }
 
-  private votacaoEmCurso(): void {
-    this.service.getStatusVotacao().subscribe(respota => {
-      this.isVotacaoEmCurso = respota.isVotacaoCurso;
-    });
+  private async votacaoEmCurso(): Promise<void> {
+    let promice = await this.votacaoPromice();
+    this.isVotacaoEmCurso = promice.isVotacaoCurso;
+  }
+
+  private votacaoPromice(): Promise<any> {
+    return this.service.getStatusVotacao().toPromise();
+  }
+
+  private async recuperarInfoVotacao(): Promise<void> {
+    let resposta = await this.recuperarInfoPromice();
+
+    this.dtInicio = new Date(resposta.dtInicio);
+    this.dtInicio.setDate(this.dtInicio.getDate() + 1);
+
+    this.timeInicio = this.getHorasByString(this.timeInicio, resposta.timeInicio);
+
+    this.dtFim = new Date(resposta.dtFim);
+    this.dtFim.setDate(this.dtFim.getDate() + 1);
+
+    this.timeFim = this.getHorasByString(this.timeFim, resposta.timeInicio);
+
+    this.tipoEleicao = resposta.tipoEleicao;
+  }
+
+  private recuperarInfoPromice(): Promise<any> {
+    return this.service.getInfoVotacao().toPromise();
+  }
+
+  private getHorasByString(time: Date, horas: string): Date{
+    time.setHours(Number(horas.split(":")[0]));
+    time.setMinutes(Number(horas.split(":")[1]));
+
+    return time;
+  }
+
+  private getDadosForm(): any{
+    let dados = {
+      _tipoEleicao: this.tipoEleicao,
+      _dtInicio:  this.formatarData(this.dtInicio),
+      _timeInicio: this.timeInicio,
+      _dtFim: this.formatarData(this.dtFim),
+      _timeFim: this.timeFim
+    }
+
+    return dados;
+  }
+
+  public formatarTime(time: Date): string | null {
+    return this.datepipe.transform(time, "HH:mm");
+  }
+
+  private formatarData(data: Date): string | null{
+    return this.datepipe.transform(data, "yyyy-MM-dd");
   }
 
   public adicionarCandidato(){
@@ -76,17 +135,20 @@ export class AdminComponent implements OnInit {
     }
   }
 
-  public configurarEleicao(){
-    let config = {
-      _tipoEleicao: this.tipoEleicao,
-      _dtInicio: this.dtInicio,
-      _timeInicio: this.timeInicio,
-      _dtFim: this.dtFim,
-      _timeFim: this.timeFim
-    }
+  public salvarTimeInicio(time: string){
+    this.timeInicio = this.getHorasByString(new Date(), time);
+  }
 
-    this.service.configEleicao(config).subscribe(resultado => {
-      this.votacaoEmCurso();
+  public salvarTimeFim(time: any){
+    this.timeFim = this.getHorasByString(new Date(), time);
+    return this.timeFim;
+  }
+
+  public configurarEleicao(){
+    let config = this.getDadosForm();
+
+    this.service.configEleicao(config).subscribe(async resultado => {
+      await this.votacaoEmCurso();
       this.service.alterarLocalStorage("espera", "false")
       this.service.alterarLocalStorage("votacao","false")
       this.service.alterarLocalStorage("resultado","false")
@@ -97,7 +159,6 @@ export class AdminComponent implements OnInit {
   public cancelarEleicao(){
     this.service.cancelarEleicao().subscribe(resposta => {
       this.isVotacaoEmCurso = false;
-      this.votacaoEmCurso();
       window.location.href = "/admin";
     });
   }
