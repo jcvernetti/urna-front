@@ -10,6 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { VotacaoComponent } from './votacao/votacao.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ApuracaoComponent } from './apuracao/apuracao.component';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,7 @@ import { ApuracaoComponent } from './apuracao/apuracao.component';
     FormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
