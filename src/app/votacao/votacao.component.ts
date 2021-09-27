@@ -48,7 +48,7 @@ export class VotacaoComponent implements OnInit {
     if(this.numeroCandidato == "") {
       this.nomeCandidato = "";
     } else {
-      this.nomeCandidato = auxCandidato == undefined ? "Candidao não encontrado": auxCandidato._nome;
+      this.nomeCandidato = auxCandidato == undefined ? "Candidato não encontrado": auxCandidato._nome;
     }
   }
 
