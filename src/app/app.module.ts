@@ -9,7 +9,9 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { VotacaoComponent } from './votacao/votacao.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { DatePipe } from '@angular/common';
 import { ResultadoComponent } from './resultado/resultado.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -24,9 +26,10 @@ import { ResultadoComponent } from './resultado/resultado.component';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    FontAwesomeModule
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

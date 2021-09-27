@@ -1,7 +1,10 @@
+import { async } from '@angular/core/testing';
 import { Candidato } from './../../../models/candidato.models';
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { DadosService } from '../service/dados.service';
+import { config } from 'rxjs';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-admin',
@@ -10,12 +13,15 @@ import { DadosService } from '../service/dados.service';
 })
 export class AdminComponent implements OnInit {
 
-  constructor(private service: DadosService, private router: Router) { }
+  constructor(private service: DadosService, private router: Router, public datepipe: DatePipe) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.atualizarListaCandidatos();
-    this.votacaoEmCurso();
-    this.dtFim.setDate(this.dtFim.getDate()+1)
+    await this.votacaoEmCurso();
+
+    if(this.isVotacaoEmCurso){
+      await this.recuperarInfoVotacao();
+    }
   }
 
   private _nome: string = "";
@@ -23,7 +29,13 @@ export class AdminComponent implements OnInit {
   private _isVotacaoEmCurso: Boolean = false;
   private _isVotacaoTerminada: Boolean = false;
   private _isCandidatoInvalido: Boolean = false;
+  private _isCandidatoDeletado: boolean = false;
+  private _isDataVotacaoInvalida: Boolean = false;
   private _isCandidatoExistente: Boolean = false;
+
+  private _mensagemDataInvalidaParte1: string = "";
+  private _mensagemDataInvalidaParte2: string = "";
+  private _mensagemCandidatoDeletado: string = "";
 
   private _tipoEleicao: string = "";
   private _dtInicio: Date = new Date();
@@ -32,6 +44,47 @@ export class AdminComponent implements OnInit {
   private _timeFim: Date = new Date();
 
   private _candidatos: Array<Candidato> = [];
+
+  private isDataVotacaoValida(): boolean {
+    let dataAgora: number = new Date().valueOf();
+    let dataInicio: number = this.inputDataInicioValido();
+    let dataFim: number = this.inputDataTerminoValido();
+
+    if(dataInicio < dataAgora) {
+      this.mensagemDataInvalidaParte1 = "Data/Hora de início inválida";
+      this.mensagemDataInvalidaParte2 = "(Deve ser maior que a data/hora atual)";
+    } else if(dataFim < dataInicio){
+      this.mensagemDataInvalidaParte1 = "Data/Hora de término inválida";
+      this.mensagemDataInvalidaParte2 = "(Deve ser menor que a data/hora de início)";
+    } else if(dataFim < dataAgora){
+      this.mensagemDataInvalidaParte1 = "Data/Hora de término inválida";
+      this.mensagemDataInvalidaParte2 = "(Deve ser maior que a data/hora atual)";
+    }
+
+    return dataInicio > dataAgora && dataFim > dataInicio && dataFim > dataAgora;
+  }
+
+  private inputDataInicioValido(): number {
+    let timeInicio: any = this.timeInicio;
+
+    let dataInicio: Date = new Date(this.dtInicio);
+    dataInicio.setDate(dataInicio.getDate() + 1);
+
+    console.log(this.getHorasByString(dataInicio, timeInicio));
+
+    return this.getHorasByString(dataInicio, timeInicio).valueOf();
+  }
+
+  private inputDataTerminoValido(): number {
+    let time: any = this.timeFim;
+
+    let dataTermino: Date = new Date(this.dtFim);
+    dataTermino.setDate(dataTermino.getDate() + 1);
+
+    console.log(this.getHorasByString(dataTermino, time));
+
+    return this.getHorasByString(dataTermino, time).valueOf();
+  }
 
   private isCandidatoNaoExistente(candidato: Candidato): Boolean{
     let candidatoExistente = this.candidatos.find(auxCand => auxCand._numero == candidato._numero);
@@ -44,10 +97,60 @@ export class AdminComponent implements OnInit {
     });
   }
 
-  private votacaoEmCurso(): void {
-    this.service.getStatusVotacao().subscribe(respota => {
-      this.isVotacaoEmCurso = respota.isVotacaoCurso;
-    });
+  private async votacaoEmCurso(): Promise<void> {
+    let promice = await this.votacaoPromice();
+    this.isVotacaoEmCurso = promice.isVotacaoCurso;
+  }
+
+  private votacaoPromice(): Promise<any> {
+    return this.service.getStatusVotacao().toPromise();
+  }
+
+  private async recuperarInfoVotacao(): Promise<void> {
+    let resposta = await this.recuperarInfoPromice();
+
+    this.dtInicio = new Date(resposta.dtInicio);
+    this.dtInicio.setDate(this.dtInicio.getDate() + 1);
+
+    this.timeInicio = this.getHorasByString(this.timeInicio, resposta.timeInicio);
+
+    this.dtFim = new Date(resposta.dtFim);
+    this.dtFim.setDate(this.dtFim.getDate() + 1);
+
+    this.timeFim = this.getHorasByString(this.timeFim, resposta.timeFim);
+
+    this.tipoEleicao = resposta.tipoEleicao;
+  }
+
+  private recuperarInfoPromice(): Promise<any> {
+    return this.service.getInfoVotacao().toPromise();
+  }
+
+  private getHorasByString(time: Date, horas: string): Date{
+    time.setHours(Number(horas.split(":")[0]));
+    time.setMinutes(Number(horas.split(":")[1]));
+
+    return time;
+  }
+
+  private getDadosForm(): any{
+    let dados = {
+      _tipoEleicao: this.tipoEleicao,
+      _dtInicio:  this.formatarData(this.dtInicio),
+      _timeInicio: this.timeInicio,
+      _dtFim: this.formatarData(this.dtFim),
+      _timeFim: this.timeFim
+    }
+
+    return dados;
+  }
+
+  public formatarTime(time: Date): string | null {
+    return this.datepipe.transform(time, "HH:mm");
+  }
+
+  private formatarData(data: Date): string | null{
+    return this.datepipe.transform(data, "yyyy-MM-dd");
   }
 
   public adicionarCandidato(){
@@ -76,28 +179,51 @@ export class AdminComponent implements OnInit {
     }
   }
 
-  public configurarEleicao(){
-    let config = {
-      _tipoEleicao: this.tipoEleicao,
-      _dtInicio: this.dtInicio,
-      _timeInicio: this.timeInicio,
-      _dtFim: this.dtFim,
-      _timeFim: this.timeFim
-    }
+  public deletarCandidato(numeroCandidato: number | undefined): void {
+    this.service.deletarCandidatos(numeroCandidato).subscribe(resposta => {
+      this.isCandidatoDeletado = true;
+      this.mensagemCandidatoDeletado = resposta.mensagem;
 
-    this.service.configEleicao(config).subscribe(resultado => {
-      this.votacaoEmCurso();
-      this.service.alterarLocalStorage("espera", "false")
-      this.service.alterarLocalStorage("votacao","false")
-      this.service.alterarLocalStorage("resultado","false")
-      this.router.navigate(["/", "votacao"])
-    })
+      setTimeout(() => {
+        this.isCandidatoDeletado = false;
+      }, 2000);
+
+      this.atualizarListaCandidatos();
+    });
+  }
+
+  public salvarTimeInicio(time: string){
+    this.timeInicio = this.getHorasByString(new Date(), time);
+  }
+
+  public salvarTimeFim(time: any){
+    this.timeFim = this.getHorasByString(new Date(), time);
+    return this.timeFim;
+  }
+
+  public configurarEleicao(){
+    let config = this.getDadosForm();
+
+    if(this.isDataVotacaoValida()){
+      this.service.configEleicao(config).subscribe(async resultado => {
+        await this.votacaoEmCurso();
+        this.service.alterarLocalStorage("espera", "false")
+        this.service.alterarLocalStorage("votacao","false")
+        this.service.alterarLocalStorage("resultado","false")
+        this.router.navigate(["/", "votacao"])
+      })
+    } else{
+      this.isDataVotacaoInvalida = true;
+
+      setTimeout(() => {
+        this.isDataVotacaoInvalida = false;
+      }, 2000);
+    }
   }
 
   public cancelarEleicao(){
     this.service.cancelarEleicao().subscribe(resposta => {
       this.isVotacaoEmCurso = false;
-      this.votacaoEmCurso();
       window.location.href = "/admin";
     });
   }
@@ -172,6 +298,46 @@ export class AdminComponent implements OnInit {
 
   public set isCandidatoExistente(value: Boolean ) {
 		this._isCandidatoExistente = value;
+	}
+
+  public get isDataVotacaoInvalida(): Boolean  {
+		return this._isDataVotacaoInvalida;
+	}
+
+  public set isDataVotacaoInvalida(value: Boolean ) {
+		this._isDataVotacaoInvalida = value;
+	}
+
+  public get isCandidatoDeletado(): boolean  {
+		return this._isCandidatoDeletado;
+	}
+
+  public set isCandidatoDeletado(value: boolean ) {
+		this._isCandidatoDeletado = value;
+	}
+
+  public get mensagemCandidatoDeletado(): string  {
+		return this._mensagemCandidatoDeletado;
+	}
+
+  public set mensagemCandidatoDeletado(value: string ) {
+		this._mensagemCandidatoDeletado = value;
+	}
+
+	public get mensagemDataInvalidaParte1(): string  {
+		return this._mensagemDataInvalidaParte1;
+	}
+
+	public set mensagemDataInvalidaParte1(value: string ) {
+		this._mensagemDataInvalidaParte1 = value;
+	}
+
+  public get mensagemDataInvalidaParte2(): string  {
+		return this._mensagemDataInvalidaParte2;
+	}
+
+  public set mensagemDataInvalidaParte2(value: string ) {
+		this._mensagemDataInvalidaParte2 = value;
 	}
 
 	public get tipoEleicao(): string  {

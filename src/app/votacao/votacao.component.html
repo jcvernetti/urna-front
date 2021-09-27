@@ -2,7 +2,7 @@
   <div class="externa m-0">
     <div class="container">
       <div class="formulario">
-        <h1 class="text-center">A votação vai começar em:</h1>
+        <h1 class="text-center">A votação começará em:</h1>
         <p class="text-center">{{dataTime | date: "dd/MM/yyyy HH:mm"}}</p>
       </div>
     </div>
@@ -39,9 +39,9 @@
         </div>
 
         <div class="text-center m-0 p-4">
-          <button type="button" class="btn btn-success m-1" (click)="votar()"        >Confirmar</button>
-          <button type="reset" class="btn btn-warning m-1"                           >Cancelar&nbsp;</button>
-          <button type="button" class="btn btn-secondary m-1" (click)="votarBranco()">&nbsp;&nbsp;Branco&nbsp;&nbsp;</button>
+          <button type="button" [disabled]="elementoDesabilitado" class="btn btn-success m-1" (click)="votar()">Confirmar</button>
+          <button type="reset"  [disabled]="elementoDesabilitado" class="btn btn-warning m-1" >Cancelar&nbsp;</button>
+          <button type="button" [disabled]="elementoDesabilitado" class="btn btn-secondary m-1" (click)="votarBranco()">&nbsp;&nbsp;Branco&nbsp;&nbsp;</button>
         </div>
       </form>
     </div>
