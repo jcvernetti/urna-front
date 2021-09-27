@@ -20,21 +20,29 @@
                       <tr>
                         <th>#</th>
                         <th>Nome</th>
-                        <th>Numero</th>
-                        <th></th>
+                        <th>Número</th>
+                        <th>Deletar</th>
                       </tr>
                     </thead>
 
                     <tbody *ngFor="let candidato of candidatos">
-                      <tr>
+                      <tr class="text-center">
                         <td>{{candidato._id}}</td>
                         <td>{{candidato._nome}}</td>
                         <td>{{candidato._numero}}</td>
+                        <td>
+                          <button [disabled]="isVotacaoEmCurso" (click)="deletarCandidato(candidato._numero)" class="btn btn-default btn-outline-danger">
+                            <span class="fa fa-trash" aria-hidden="true"></span>
+                          </button>
+                        </td>
                       </tr>
                     </tbody>
                   </table>
 
-                  <span *ngIf="candidatos.length == 0">Nenhm candidato cadastrado !!!</span>
+                  <div class="text-center">
+                    <span *ngIf="candidatos.length == 0 && !isCandidatoDeletado">Nenhum candidato cadastrado !!!</span>
+                    <span *ngIf="isCandidatoDeletado" class="text-muted">{{mensagemCandidatoDeletado}}</span>
+                  </div>
 
                 </div>
 
@@ -45,13 +53,13 @@
                   </div>
 
                   <div class="form-field m-3" style="width: 95%;">
-                    <label for="inputNumeroCandidato" class="form-field__label">Numero do candidato:</label>
+                    <label for="inputNumeroCandidato" class="form-field__label">Número do candidato:</label>
                     <input type="text" id="inputNumeroCandidato" class="form-field__input" disabled="{{candidatos.length == 5 || isVotacaoEmCurso}}"  [(ngModel)]="numero">
                   </div>
 
                   <div class="text-center m-1">
                     <span *ngIf="isCandidatoInvalido">Candidato inválido !</span>
-                    <span *ngIf="isCandidatoExistente">Numero de candidato já cadastrado !</span>
+                    <span *ngIf="isCandidatoExistente">Número de candidato já cadastrado !</span>
                     <span *ngIf="candidatos.length == 5 && !isVotacaoEmCurso">Quantidade máxima de candidatos atingida !</span>
                     <span *ngIf="isVotacaoEmCurso">Existe uma votação em curso, não é possível cadastrar mais candidatos</span>
                   </div>
@@ -134,7 +142,15 @@
                       </div>
                     </div>
 
-                    <div class="text-center m-2">
+                    <div class="text-center text-muted" *ngIf="isDataVotacaoInvalida">
+                      <span>{{mensagemDataInvalidaParte1}}</span>
+                    </div>
+
+                    <div class="text-center text-muted" *ngIf="isDataVotacaoInvalida">
+                      <span>{{mensagemDataInvalidaParte2}}</span>
+                    </div>
+
+                    <div class="text-center m-2" *ngIf="!isDataVotacaoInvalida">
                       <button type="button" class="btn btn-primary m-1" [disabled]="isVotacaoEmCurso" (click)="configurarEleicao()">Iniciar votação</button>
                       <button type="button" class="btn btn-danger m-1" [hidden]="!isVotacaoEmCurso" (click)="cancelarEleicao()">Cancelar votação</button>
                     </div>

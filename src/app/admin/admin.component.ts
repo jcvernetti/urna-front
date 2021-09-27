@@ -19,10 +19,7 @@ export class AdminComponent implements OnInit {
     this.atualizarListaCandidatos();
     await this.votacaoEmCurso();
 
-    if(!this.isVotacaoEmCurso){
-      this.timeInicio.setMinutes(this.timeInicio.getMinutes() + (5 - this.timeInicio.getMinutes() % 5));
-      this.timeFim.setMinutes(this.timeInicio.getMinutes() + 60);
-    } else {
+    if(this.isVotacaoEmCurso){
       await this.recuperarInfoVotacao();
     }
   }
@@ -32,7 +29,13 @@ export class AdminComponent implements OnInit {
   private _isVotacaoEmCurso: Boolean = false;
   private _isVotacaoTerminada: Boolean = false;
   private _isCandidatoInvalido: Boolean = false;
+  private _isCandidatoDeletado: boolean = false;
+  private _isDataVotacaoInvalida: Boolean = false;
   private _isCandidatoExistente: Boolean = false;
+
+  private _mensagemDataInvalidaParte1: string = "";
+  private _mensagemDataInvalidaParte2: string = "";
+  private _mensagemCandidatoDeletado: string = "";
 
   private _tipoEleicao: string = "";
   private _dtInicio: Date = new Date();
@@ -41,6 +44,47 @@ export class AdminComponent implements OnInit {
   private _timeFim: Date = new Date();
 
   private _candidatos: Array<Candidato> = [];
+
+  private isDataVotacaoValida(): boolean {
+    let dataAgora: number = new Date().valueOf();
+    let dataInicio: number = this.inputDataInicioValido();
+    let dataFim: number = this.inputDataTerminoValido();
+
+    if(dataInicio < dataAgora) {
+      this.mensagemDataInvalidaParte1 = "Data/Hora de início inválida";
+      this.mensagemDataInvalidaParte2 = "(Deve ser maior que a data/hora atual)";
+    } else if(dataFim < dataInicio){
+      this.mensagemDataInvalidaParte1 = "Data/Hora de término inválida";
+      this.mensagemDataInvalidaParte2 = "(Deve ser menor que a data/hora de início)";
+    } else if(dataFim < dataAgora){
+      this.mensagemDataInvalidaParte1 = "Data/Hora de término inválida";
+      this.mensagemDataInvalidaParte2 = "(Deve ser maior que a data/hora atual)";
+    }
+
+    return dataInicio > dataAgora && dataFim > dataInicio && dataFim > dataAgora;
+  }
+
+  private inputDataInicioValido(): number {
+    let timeInicio: any = this.timeInicio;
+
+    let dataInicio: Date = new Date(this.dtInicio);
+    dataInicio.setDate(dataInicio.getDate() + 1);
+
+    console.log(this.getHorasByString(dataInicio, timeInicio));
+
+    return this.getHorasByString(dataInicio, timeInicio).valueOf();
+  }
+
+  private inputDataTerminoValido(): number {
+    let time: any = this.timeFim;
+
+    let dataTermino: Date = new Date(this.dtFim);
+    dataTermino.setDate(dataTermino.getDate() + 1);
+
+    console.log(this.getHorasByString(dataTermino, time));
+
+    return this.getHorasByString(dataTermino, time).valueOf();
+  }
 
   private isCandidatoNaoExistente(candidato: Candidato): Boolean{
     let candidatoExistente = this.candidatos.find(auxCand => auxCand._numero == candidato._numero);
@@ -73,7 +117,7 @@ export class AdminComponent implements OnInit {
     this.dtFim = new Date(resposta.dtFim);
     this.dtFim.setDate(this.dtFim.getDate() + 1);
 
-    this.timeFim = this.getHorasByString(this.timeFim, resposta.timeInicio);
+    this.timeFim = this.getHorasByString(this.timeFim, resposta.timeFim);
 
     this.tipoEleicao = resposta.tipoEleicao;
   }
@@ -135,6 +179,19 @@ export class AdminComponent implements OnInit {
     }
   }
 
+  public deletarCandidato(numeroCandidato: number | undefined): void {
+    this.service.deletarCandidatos(numeroCandidato).subscribe(resposta => {
+      this.isCandidatoDeletado = true;
+      this.mensagemCandidatoDeletado = resposta.mensagem;
+
+      setTimeout(() => {
+        this.isCandidatoDeletado = false;
+      }, 2000);
+
+      this.atualizarListaCandidatos();
+    });
+  }
+
   public salvarTimeInicio(time: string){
     this.timeInicio = this.getHorasByString(new Date(), time);
   }
@@ -147,13 +204,21 @@ export class AdminComponent implements OnInit {
   public configurarEleicao(){
     let config = this.getDadosForm();
 
-    this.service.configEleicao(config).subscribe(async resultado => {
-      await this.votacaoEmCurso();
-      this.service.alterarLocalStorage("espera", "false")
-      this.service.alterarLocalStorage("votacao","false")
-      this.service.alterarLocalStorage("resultado","false")
-      this.router.navigate(["/", "votacao"])
-    })
+    if(this.isDataVotacaoValida()){
+      this.service.configEleicao(config).subscribe(async resultado => {
+        await this.votacaoEmCurso();
+        this.service.alterarLocalStorage("espera", "false")
+        this.service.alterarLocalStorage("votacao","false")
+        this.service.alterarLocalStorage("resultado","false")
+        this.router.navigate(["/", "votacao"])
+      })
+    } else{
+      this.isDataVotacaoInvalida = true;
+
+      setTimeout(() => {
+        this.isDataVotacaoInvalida = false;
+      }, 2000);
+    }
   }
 
   public cancelarEleicao(){
@@ -233,6 +298,46 @@ export class AdminComponent implements OnInit {
 
   public set isCandidatoExistente(value: Boolean ) {
 		this._isCandidatoExistente = value;
+	}
+
+  public get isDataVotacaoInvalida(): Boolean  {
+		return this._isDataVotacaoInvalida;
+	}
+
+  public set isDataVotacaoInvalida(value: Boolean ) {
+		this._isDataVotacaoInvalida = value;
+	}
+
+  public get isCandidatoDeletado(): boolean  {
+		return this._isCandidatoDeletado;
+	}
+
+  public set isCandidatoDeletado(value: boolean ) {
+		this._isCandidatoDeletado = value;
+	}
+
+  public get mensagemCandidatoDeletado(): string  {
+		return this._mensagemCandidatoDeletado;
+	}
+
+  public set mensagemCandidatoDeletado(value: string ) {
+		this._mensagemCandidatoDeletado = value;
+	}
+
+	public get mensagemDataInvalidaParte1(): string  {
+		return this._mensagemDataInvalidaParte1;
+	}
+
+	public set mensagemDataInvalidaParte1(value: string ) {
+		this._mensagemDataInvalidaParte1 = value;
+	}
+
+  public get mensagemDataInvalidaParte2(): string  {
+		return this._mensagemDataInvalidaParte2;
+	}
+
+  public set mensagemDataInvalidaParte2(value: string ) {
+		this._mensagemDataInvalidaParte2 = value;
 	}
 
 	public get tipoEleicao(): string  {
