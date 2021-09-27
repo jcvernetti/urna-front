@@ -10,7 +10,7 @@ Para executar o projeto, é necessário instalar os seguintes programas:
 - npm package manager (normalmente, ao instalar o Node.js, o pacote npm é instalado simultaneamente)
 - Angular CLI (Para instalar o Angular CLI, abra uma janela de terminal e execute o seguinte comando: `npm install -g @angular/cli`)
 
-# Como executar o projeto
+# Como executar o projeto 
 
 Rodar as linhas de comando abaixo em um terminal:
 
